@@ -1,2 +1,57 @@
 <h1>Welcome#index</h1>
-<a href="<%= @login_uri %>">login</a>
+<div id="vueApp">
+  <input type="text" name="payload" id="txt_payload" placeholder="input payload">
+  <input type="hidden" name="login_uri" value="<%= @login_server %>" >
+
+  <div class="row">
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label for="payload"></label>
+            <input type="text" class="form-control" value="" v-model="payload">
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <a href="#" class="btn btn-success" @click="doLogin">Login</a>
+    </div>
+  </div>
+</div>
+
+<form name="login_form" onsubmit="return doLogin()">
+    <input type="text" name="payload" id="txt_payload" placeholder="input payload">
+    <input type="hidden" name="login_uri" value="<%= @login_server %>" >
+    <input type="submit">
+</form>
+
+<script>
+Vue.http.options.emulateJSON = true; // send as 
+
+new Vue({
+    el: '#vueApp',
+    data: {
+        debug: true,
+        domain: '',
+        ajaxRequest: false,
+        postResults: []
+    },
+    methods: {
+      checkWebsite: function() {
+        this.ajaxRequest = true;
+        this.$http.post('http://demo8159500.mockable.io/post/check', {
+              domain: this.domain
+            }, function (data, status, request) {
+                this.postResults = data;
+
+                this.ajaxRequest = false;
+            });
+      }}
+});
+// var doLogin = function() {
+//     var form = document.forms["login_form"]
+//     var payload_data = form.elements["payload"].value
+//     var callback_data = document.location.href
+//     var data = { payload: payload_data, callback: callback_data }
+//     var uri = form.elements["login_uri"].value
+//     console.log(data)
+//     return false
+// }
+</script>
